@@ -5,7 +5,7 @@
  * @counter: not used
  * Return: no return
 */
-void my_pall(stack_t **head, unsigned int counter)
+void my_pall(stack_t **stack, unsigned int counter_numb);
 {
 	stack_t *h;
 	(void)counter;

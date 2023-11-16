@@ -12,11 +12,11 @@
 /* MY DATA STRUCTURES */
 /**
  * struct my_stack_s - doubly linked list rep of a stack (or queue)
- * @n: integer value
- * @prev: points to the previous element of the stack (or queue)
- * @next: points to the next element of the stack (or queue)
+ * @n: integer
+ * @prev: points to  prev element of the stack (or queue)
+ * @next: points to  next element of the stack (or queue)
  *
- * Description: Doubly linked list node structure
+ * Des: doubly linked list node structure
  * for stack, queues, LIFO, FIFO
  */
 typedef struct my_stack_s
@@ -31,7 +31,8 @@ typedef struct my_stack_s
  * @opcode: the opcode
  * @f: func to handle the opcode
  *
- * Description: Opcode and its function for stack, queues, LIFO, FIFO
+ * Description: opcode and its function
+ * for stack, queues, LIFO, FIFO
  */
 typedef struct my_instruction_s
 {
@@ -41,11 +42,11 @@ typedef struct my_instruction_s
 
 /**
  * struct _File_content - struct holding item of a line
- * @file: pointer to the file
- * @line: a pointer to the line (read by getline)
- * @opcode_my_instruction: array holding an instruction_t struct
+ * @file: pointer to  file
+ * @line: a pointer to line (read by getline)
+ * @opcode_my_instruction: array holding a instruction_t struct
  * @head: pointer to the head
- * @counter_numb: line number being read
+ * @counter_numb:line number been read
  * @num_tokens: number of tokens passed
  * @tokens: holds the tokenized string
  */
@@ -62,7 +63,6 @@ typedef struct _File_content
 } _File_content;
 
 extern _File_content *file_ptr;
-
 
 /* MY  FUNCTION PROTOTYPES */
 void my_pall(stack_t **stack, unsigned int counter_numb);
@@ -97,3 +97,4 @@ void my_mul(stack_t **stack, unsigned int counter_numb);
 void my_rotl(stack_t **stack, unsigned int counter_numb);
 void my_rotr(stack_t **stack, unsigned int counter_numb);
 #endif /* MONTY_H */
+

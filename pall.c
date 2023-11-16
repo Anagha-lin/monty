@@ -1,24 +1,25 @@
 #include "monty.h"
 
 /**
- * my_pall - prints all the values on the head_stack, starting
- * from the top of the head_stack
- * @stack: stack head
- * @counter_numb: not used
- * Return: no return
+ * my_pall - Prints the elements of the stack.
+ * @head: Stack head.
+ * @counter: Unused parameter.
+ * Return: No return.
  */
-void my_pall(stack_t **stack, unsigned int counter_numb)
+void my_pall(stack_t **head, unsigned int counter)
 {
-	stack_t *h;
-	(void)counter_numb;
+    stack_t *current;
+    (void)counter;
 
-	h = *stack;
-	if (h == NULL)
-	return;
-	while (h)
-	{
-		printf("%d\n", h->n);
-		h = h->next;
-	}
+    current = *head;
+
+    if (current == NULL)
+        return;
+
+    while (current)
+    {
+        printf("%d\n", current->n);
+        current = current->next;
+    }
 }
 

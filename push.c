@@ -1,39 +1,48 @@
 #include "monty.h"
+#include <stdio.h>
 
 /**
- * my_push - Pushes a value onto the stack.
- * @stack: A pointer to the head of the stack.
- * @counter_numb: The line number in the file.
+ * my_push - Adds a node to the stack.
+ * @head: Stack head.
+ * @counter: Line number.
+ * Return: No return.
  */
-void my_push(stack_t **stack, unsigned int counter_numb)
+void my_push(stack_t **head, unsigned int counter)
 {
-	if (file_ptr->num_tokens <= 1 || !(my_check_digit_(file_ptr->tokens[1])))
-	{
-	fprintf(stderr, "L%d: usage: push integer\n", counter_numb);
-	my_fclose_file();
-	my_free_tokens();
-	my_free_file_ptr();
-	exit(EXIT_FAILURE);
-	}
+    int n, j = 0, flag = 0;
 
-	*stack = malloc(sizeof(stack_t));
-	if (*stack == NULL)
-	{
-	fprintf(stderr, "Error: malloc failed\n");
-	my_fclose_file();
-	my_free_tokens();
-	my_free_file_ptr();
-	exit(EXIT_FAILURE);
-	}
+    if (bus.arg)
+    {
+        if (bus.arg[0] == '-')
+            j++;
+        for (; bus.arg[j] != '\0'; j++)
+        {
+            if (bus.arg[j] > 57 || bus.arg[j] < 48)
+                flag = 1;
+        }
+        if (flag == 1)
+        {
+            fprintf(stderr, "L%d: usage: push integer\n", counter);
+            fclose(bus.file);
+            free(bus.content);
+            free_stack(*head);
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        fprintf(stderr, "L%d: usage: push integer\n", counter);
+        fclose(bus.file);
+        free(bus.content);
+        free_stack(*head);
+        exit(EXIT_FAILURE);
+    }
 
-	(*stack)->next = (*stack)->prev = NULL;
-	(*stack)->n = (int)atoi(file_ptr->tokens[1]);
+    n = atoi(bus.arg);
 
-	if (file_ptr->head != NULL)
-	{
-	(*stack)->next = file_ptr->head;
-	file_ptr->head->prev = *stack;
-	}
-	file_ptr->head = *stack;
+    if (bus.lifi == 0)
+        addnode(head, n);
+    else
+        addqueue(head, n);
 }
 

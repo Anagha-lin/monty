@@ -1,100 +1,62 @@
 #ifndef MONTY_H
 #define MONTY_H
 
-/* MY HEADER FILES*/
-
-#define  _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <string.h>
 #include <ctype.h>
 
-/* MY DATA STRUCTURES */
-/**
- * struct my_stack_s - doubly linked list rep of a stack (or queue)
- * @n: integer
- * @prev: points to  prev element of the stack (or queue)
- * @next: points to  next element of the stack (or queue)
- *
- * Des: doubly linked list node structure
- * for stack, queues, LIFO, FIFO
- */
-typedef struct my_stack_s
+typedef struct stack_s
 {
-	int n;
-	struct my_stack_s *prev;
-	struct my_stack_s *next;
+    int n;
+    struct stack_s *prev;
+    struct stack_s *next;
 } stack_t;
 
-/**
- * struct my_instruction_s - opcode and its function
- * @opcode: the opcode
- * @f: func to handle the opcode
- *
- * Description: opcode and its function
- * for stack, queues, LIFO, FIFO
- */
-typedef struct my_instruction_s
+typedef struct bus_s
 {
-	char *opcode;
-	void (*f)(stack_t **stack, unsigned int counter_numb);
-} my_instruction_t;
+    char *arg;
+    FILE *file;
+    char *content;
+    int lifi;
+} bus_t;
 
-/**
- * struct _File_content - struct holding item of a line
- * @file: pointer to  file
- * @line: a pointer to line (read by getline)
- * @opcode_my_instruction: array holding a instruction_t struct
- * @head: pointer to the head
- * @counter_numb:line number been read
- * @num_tokens: number of tokens passed
- * @tokens: holds the tokenized string
- */
+extern bus_t bus;
 
-typedef struct _File_content
+typedef struct instruction_s
 {
-	FILE *file;
-	char *line;
-	unsigned int counter_numb;
-	int num_tokens;
-	char **tokens;
-	my_instruction_t *opcode_my_instruction;
-	stack_t *head;
-} _File_content;
+    char *opcode;
+    void (*my_func)(stack_t **stack, unsigned int line_number);
+} instruction_t;
 
-extern _File_content *file_ptr;
+char *_realloc(char *ptr, unsigned int old_size, unsigned int new_size);
+ssize_t getstdin(char **lineptr, int file);
+char *clean_line(char *content);
 
-/* MY  FUNCTION PROTOTYPES */
-void my_pall(stack_t **stack, unsigned int counter_numb);
-void my_pint(stack_t **stack, unsigned int counter_numb);
-void my_pop(stack_t **stack, unsigned int counter_numb);
-void my_swap(stack_t **stack, unsigned int counter_numb);
-void my_count_arguments(int argc);
-int main(int argc, char **argv);
-void my_handle_file_opening(const char *name_of_file, FILE **file);
-_File_content *allocated_file_content(void);
-void my_parse_line(void);
-void my_get_opcode_func(void);
-void my_invalid_instruction(void);
-void my_fclose_file(void);
-void my_free_tokens(void);
-void my_free_file_ptr(void);
-void my_execute_opcode(void);
-void my_push(stack_t **stack, unsigned int counter_numb);
-void my_free_stack(stack_t *head);
-int my_check_digit_(char *str);
-void my_free_head(void);
-void my_nop(stack_t **stack, unsigned int counter_numb);
-int my_count_stacks(stack_t *stack);
-void my_add(stack_t **stack, unsigned int counter_numb);
-void sub(stack_t **stack, unsigned int counter_numb);
-void my_mod(stack_t **stack, unsigned int counter_numb);
-void my_handle_hash(void);
-void my_pchar(stack_t **stack, unsigned int counter_numb);
-void my_pstr(stack_t **stack, unsigned int counter_numb);
-void my_div(stack_t **stack, unsigned int counter_numb);
-void my_mul(stack_t **stack, unsigned int counter_numb);
-void my_rotl(stack_t **stack, unsigned int counter_numb);
-void my_rotr(stack_t **stack, unsigned int counter_numb);
-#endif /* MONTY_H */
+void my_pop(stack_t **head, unsigned int counter);
+void my_push(stack_t **head, unsigned int number);
+void my_pint(stack_t **head, unsigned int number);
+void my_add(stack_t **head, unsigned int counter);
+void my_mod(stack_t **head, unsigned int counter);
+void my_swap(stack_t **head, unsigned int counter);
+void my_pchar(stack_t **head, unsigned int counter);
+void my_nop(stack_t **head, unsigned int counter);
+void my_sub(stack_t **head, unsigned int counter);
+void my_mul(stack_t **head, unsigned int counter);
+void my_pstr(stack_t **head, unsigned int counter);
+void my_queue(stack_t **head, unsigned int counter);
+void my_rotr(stack_t **head, __attribute__((unused)) unsigned int counter);
+void my_stack(stack_t **head, unsigned int counter);
+void my_rotl(stack_t **head, unsigned int counter);
+void addnode(stack_t **head, int n);
+void addqueue(stack_t **head, int n);
+void my_div(stack_t **head, unsigned int counter);
+void my_pall(stack_t **head, unsigned int number);
+int execute(char *content, stack_t **head, unsigned int counter, FILE *file);
+void free_stack(stack_t *head);
+
+#endif
 

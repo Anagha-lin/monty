@@ -1,15 +1,14 @@
 #include "monty.h"
 
-bus_t bus;
-
 int main(void)
 {
     stack_t *stack = NULL;
     char *line = NULL;
     size_t len = 0;
-    ssize_t read;
+    size_t read;
     unsigned int line_number = 1;
 
+    bus_t bus;
     bus.file = fopen("example.m", "r");
     if (bus.file == NULL)
     {
@@ -25,7 +24,7 @@ int main(void)
             if (execute(bus.content, &stack, line_number, bus.file) == EXIT_FAILURE)
             {
                 free(line);
-                free_stack(stack);
+                my_free_stack(stack);
                 fclose(bus.file);
                 exit(EXIT_FAILURE);
             }
@@ -34,7 +33,7 @@ int main(void)
     }
 
     free(line);
-    free_stack(stack);
+    my_free_stack(stack);
     fclose(bus.file);
     return EXIT_SUCCESS;
 }

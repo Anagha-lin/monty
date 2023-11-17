@@ -1,58 +1,66 @@
 #include "monty.h"
-#include <stdio.h>
 
 /**
- * execute - executes the opcode
- * @content: line content
- * @stack: head linked list - stack
- * @counter: line_counter
- * @file: pointer to monty file
- * Return: no return
+ * execute_file - reads and executes opcodes from a file
+ * @stack: pointer to the top of the stack
  */
-int execute(char *content, stack_t **stack, unsigned int counter, FILE *file)
+void execute_file(stack_t **stack)
 {
-    instruction_t opst[] = {
-        {"push", my_push}, {"pall", my_pall}, {"pint", my_pint},
-        {"pop", my_pop},
-        {"swap", my_swap},
-        {"add", my_add},
-        {"nop", my_nop},
-        {"sub", my_sub},
-        {"div", my_div},
-        {"mul", my_mul},
-        {"mod", my_mod},
-        {"pchar", my_pchar},
-        {"pstr", my_pstr},
-        {"rotl", my_rotl},
-        {"rotr", my_rotr},
-        {"queue", my_queue},
-        {"stack", my_stack},
-        {NULL, NULL}};
+	char *opcode = NULL;
+	size_t len = 0;
+	ssize_t nread;
+	unsigned int line_number = 0;
 
-    unsigned int i = 0;
-    char *op;
+	while ((nread = getline(&bus.content, &len, bus.file)) != -1)
+	{
+	line_number++;
+	opcode = strtok(bus.content, " \t\r\n\a");
+	bus.arg = strtok(NULL, " \n\t");
+	if (opcode == NULL || *opcode == '#')
+	continue;
+	execute_opcode(opcode, stack, line_number);
+	}
+}
 
-    op = strtok(content, " \n\t");
-    if (op && op[0] == '#')
-        return 0;
-    bus.arg = strtok(NULL, " \n\t");
-    while (opst[i].opcode && op)
-    {
-        if (strcmp(op, opst[i].opcode) == 0)
-        {
-            opst[i].my_func(stack, counter);
-            return 0;
-        }
-        i++;
-    }
-    if (op && opst[i].opcode == NULL)
-    {
-        fprintf(stderr, "L%d: unknown instruction %s\n", counter, op);
-        fclose(file);
-        free(content);
-        free_stack(*stack);
-        exit(EXIT_FAILURE);
-    }
-    return 1;
+/**
+ * execute_opcode - executes a single opcode
+ * @opcode: opcode to execute
+ * @stack: pointer to the top of the stack
+ * @line_number: line number of the opcode
+ */
+void execute_opcode(char *opcode, stack_t **stack, unsigned int line_number)
+{
+	instruction_t instructions[] = {
+	{"push", my_push},
+	{"pall", my_pall},
+	{"pint", my_pint},
+	{"pop", my_pop},
+	{"swap", my_swap},
+	{"nop", my_nop},
+	{"add", my_add},
+	{"sub", my_sub},
+	{"div", my_div},
+	{"mul", my_mul},
+	{"mod", my_mod},
+	{"pchar", my_pchar},
+	{"pstr", my_pstr},
+	{NULL, NULL}
+	};
+	int i;
+
+	for (i = 0; instructions[i].opcode != NULL; i++)
+	{
+	if (strcmp(opcode, instructions[i].opcode) == 0)
+	{
+	instructions[i].my_func(stack, line_number);
+	return;
+	}
+	}
+
+	fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+	my_free_stack(*stack);
+	fclose(bus.file);
+	free(bus.content);
+	exit(EXIT_FAILURE);
 }
 

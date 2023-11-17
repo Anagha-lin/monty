@@ -1,4 +1,5 @@
 #include "monty.h"
+#include <stdio.h>
 
 /**
  * my_sub - Subtracts the top element of the stack from the second top element.
